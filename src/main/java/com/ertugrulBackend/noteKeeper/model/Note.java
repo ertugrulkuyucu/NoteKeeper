@@ -1,31 +1,28 @@
 package com.ertugrulBackend.noteKeeper.model;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
+import org.w3c.dom.Text;
+
+@Entity
+@Table(name = "notes")
 public class Note {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column()
+    private String note;
+
+    @Column()
     private String title;
-    private String content;
 
-    public Note() {
-    }
+/*
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+*/
 
-    public Note(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
 }
