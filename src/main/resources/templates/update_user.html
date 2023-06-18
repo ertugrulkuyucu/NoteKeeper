@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+  <div class="container">
+    <h1>User Control System</h1>
+    <hr>
+    <h2>Update User</h2>
+
+    <form action="#" th:action="@{/saveUser}" th:object="${user}" method="post">
+
+      <!-- This is the hidden field that will be used to update the user -->
+      <input type="hidden" th:field="*{id}">
+
+      <div class="form-group">
+        <input type="text" class="form-control" id="name" th:field="*{username}">
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" id="email" th:field="*{email}">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" id="password" th:field="*{password}">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+  </div>
+
+</body>
+</html>
