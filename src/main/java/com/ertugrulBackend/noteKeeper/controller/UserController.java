@@ -1,9 +1,11 @@
 package com.ertugrulBackend.noteKeeper.controller;
 
+import com.ertugrulBackend.noteKeeper.configrations.RedisConfiguration;
 import com.ertugrulBackend.noteKeeper.model.User;
 import com.ertugrulBackend.noteKeeper.service.NoteService;
 import com.ertugrulBackend.noteKeeper.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +20,24 @@ public class UserController {
     @Autowired
     private NoteService noteService;
 
+    private long lastClear = 0;
 
-    //displat list of users
+
     @GetMapping("/")
-    public String viewHomePage(Model model){
+    public String viewHomePage(Model model) throws InterruptedException {
+
+        var time = System.currentTimeMillis();
+        if (time - lastClear > 10000) {
+            lastClear = time;
+            userService.clearCache();
+        }
+
         model.addAttribute("listUsers", userService.getAllUsers());
         return "index";
     }
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user){
-        //save user to database
         userService.saveUser(user);
         return "redirect:/";
     }
@@ -36,7 +45,6 @@ public class UserController {
 
     @GetMapping("/showNewUserForm")
     public String showNewUserForm(Model model){
-        //create model attribute to bind form data
         User user = new User();
         model.addAttribute("user", user);
         return "new_user";
@@ -45,10 +53,8 @@ public class UserController {
     @GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable (value = "id") long id, Model model) {
 
-        //get user from the service
         User user = userService.getUserById(id);
 
-        //set user as a model attribute to pre-populate the form
         model.addAttribute("user", user);
         return "update_user";
 
@@ -57,7 +63,6 @@ public class UserController {
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable (value = "id") long id) {
 
-        //call delete user method
         this.userService.deleteUserById(id);
         return "redirect:/";
 

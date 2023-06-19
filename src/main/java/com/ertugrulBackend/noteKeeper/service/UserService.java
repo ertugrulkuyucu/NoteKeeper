@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAllUsers();
+    List<User> getAllUsers() throws InterruptedException;
+
+    void clearCache();
 
     void saveUser(User user);
 
